@@ -18,6 +18,7 @@ import json
 import os
 import pep8
 import unittest
+
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
@@ -25,6 +26,7 @@ classes = {"Amenity": Amenity, "City": City, "Place": Place,
 
 class TestDBStorageDocs(unittest.TestCase):
     """Tests to check the documentation and style of DBStorage class"""
+
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
@@ -67,9 +69,24 @@ test_db_storage.py'])
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
 
+    def test_get_func(self):
+        """check if gotten instance in dbstorage"""
+        new_o = State("california")
+        obj = models.storage.get("State", "fakeid")
+        self.assertIsNone(obj)
+
+    def test_count_func(self):
+        """check all objects in dbstorage"""
+        all_count = models.storage.count()
+        self.assertIsInstance(all_count, int)
+        cls_count = models.storage.count("State")
+        self.assertIsInstance(cls_count, int)
+        self.assertGreaterEqual(cls_count, all_count)
+
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
+
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
         """Test that all returns a dictionaty"""
