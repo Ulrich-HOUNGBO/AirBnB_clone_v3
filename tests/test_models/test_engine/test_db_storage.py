@@ -75,13 +75,18 @@ test_db_storage.py'])
         obj = models.storage.get("State", "fakeid")
         self.assertIsNone(obj)
 
-    def test_count_func(self):
-        """check all objects in dbstorage"""
-        all_count = models.storage.count()
-        self.assertIsInstance(all_count, int)
-        cls_count = models.storage.count("State")
-        self.assertIsInstance(cls_count, int)
-        self.assertGreaterEqual(cls_count, all_count)
+    def test_count(self):
+        """
+            Test if count method returns expected number of objects
+        """
+        old_count = models.storage.count("State")
+        new_state1 = State(name="NewYork")
+        models.storage.new(new_state1)
+        new_state2 = State(name="Virginia")
+        models.storage.new(new_state2)
+        new_state3 = State(name="California")
+        models.storage.new(new_state3)
+        self.assertNotEqual(old_count, models.storage.count("State"))
 
 
 class TestFileStorage(unittest.TestCase):

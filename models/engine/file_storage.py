@@ -70,22 +70,26 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """retrieve object on value and id"""
-        result = None
-        try:
-            for v in self.__objects.values():
-                if v.id == id:
-                    result = v
-        except BaseException:
-            pass
-        return result
+        """ gets an object
+        Args:
+            cls (str): class name
+            id (str): object ID
+        Returns:
+            an object based on class name and its ID"""
+        obj = self.all(cls)
+        for k, v in obj.items():
+            value = cls + '.' + id
+            if k == value:
+                return v
 
     def count(self, cls=None):
-        """count all objects in Filestorage """
-        cls_counter = 0
-        for k in self.__objects.keys():
-            if cls in k:
-                cls_counter += 1
-            else:
-                cls_counter = len(self.__objects)
-        return cls_counter
+        """
+        counts number of objects of a class (if given)
+        Args:
+            cls (str): class name
+        Returns:
+            number of objects in class, if no class name given
+            return total number of objects in a database
+        """
+        obj_dict = self.all(cls)
+        return obj_dict
